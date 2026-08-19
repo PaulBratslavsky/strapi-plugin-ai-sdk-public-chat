@@ -1,0 +1,35 @@
+# Development files
+.vscode/
+.git/
+.gitignore
+.editorconfig
+.eslintignore
+.prettierrc
+.prettierignore
+
+# Documentation (optional - remove this line if you want docs in package)
+docs/
+
+# Source files (dist is published instead)
+admin/
+server/
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__/
+
+# Package manager files
+node_modules/
+yarn.lock
+package-lock.json
+
+# IDE files
+*.swp
+*.swo
+.idea/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db

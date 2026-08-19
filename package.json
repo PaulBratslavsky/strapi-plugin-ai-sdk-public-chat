@@ -1,0 +1,79 @@
+{
+  "name": "strapi-plugin-ai-sdk-public-chat",
+  "version": "1.0.0",
+  "description": "Anonymous-facing chat widget for strapi-plugin-ai-sdk, isolated behind its own routes, permissions, and explicit tool allow-list",
+  "license": "MIT",
+  "author": "Paul Brats <codingafterthirty@gmail.com>",
+  "type": "commonjs",
+  "keywords": [
+    "strapi-plugin-ai-sdk-public-chat",
+    "strapi",
+    "plugin",
+    "ai-sdk",
+    "chat",
+    "widget",
+    "ai"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-server": {
+      "types": "./dist/server/src/index.d.ts",
+      "source": "./server/src/index.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "./strapi-server.js"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build && npm run build:widget",
+    "build:plugin": "strapi-plugin build",
+    "build:widget": "vite build --config widget/vite.config.mts",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify",
+    "test:ts:back": "npx tsc -p server/tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "ai": "^6.0.0",
+    "zod": "^4.3.5",
+    "@ai-sdk/react": "^3.0.41",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@strapi/sdk-plugin": "^5.3.2",
+    "@strapi/strapi": "^5.47.0",
+    "@strapi/typescript-utils": "^5.47.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.5.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.47.0",
+    "strapi-plugin-ai-sdk": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "strapi-plugin-ai-sdk": {
+      "optional": true
+    }
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "ai-sdk-public-chat",
+    "displayName": "AI SDK: Public Chat",
+    "description": "Anonymous chat widget with an explicit tool allow-list"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  }
+}
