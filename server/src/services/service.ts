@@ -13,6 +13,8 @@ const PREAMBLE =
 interface AiSdkPlugin {
   aiProvider?: {
     streamRaw: (input: Record<string, unknown>) => Promise<any>;
+    generateText: (prompt: string, options?: Record<string, unknown>) => Promise<{ text: string }>;
+    streamText: (prompt: string, options?: Record<string, unknown>) => Promise<{ textStream: AsyncIterable<string> }>;
   };
   toolRegistry?: unknown;
 }
@@ -23,7 +25,41 @@ function trimMessages(messages: UIMessage[], max: number): UIMessage[] {
   return messages.slice(-max);
 }
 
+function requireProvider(strapi: Core.Strapi): NonNullable<AiSdkPlugin['aiProvider']> {
+  const aiSdk = strapi.plugin('ai-sdk') as unknown as AiSdkPlugin | undefined;
+  if (!aiSdk?.aiProvider) {
+    throw new Error(
+      'strapi-plugin-ai-sdk is not installed or failed to initialize; public chat cannot run.',
+    );
+  }
+  return aiSdk.aiProvider;
+}
+
 const service = ({ strapi }: { strapi: Core.Strapi }) => ({
+  /**
+   * Prompt in, text out. No tools, no history — the simplest external
+   * surface, and the one an integration reaches for when it wants generation
+   * rather than a conversation.
+   */
+  async ask(prompt: string, options?: { system?: string }): Promise<string> {
+    const provider = requireProvider(strapi);
+    const config = strapi.config.get<PublicChatConfig>('plugin::ai-sdk-public-chat');
+    const result = await provider.generateText(prompt, {
+      system: options?.system ?? config.systemPrompt,
+    });
+    return result.text;
+  },
+
+  /** Same as `ask`, streamed. */
+  async askStream(prompt: string, options?: { system?: string }): Promise<AsyncIterable<string>> {
+    const provider = requireProvider(strapi);
+    const config = strapi.config.get<PublicChatConfig>('plugin::ai-sdk-public-chat');
+    const result = await provider.streamText(prompt, {
+      system: options?.system ?? config.systemPrompt,
+    });
+    return result.textStream;
+  },
+
   async chat(messages: UIMessage[]) {
     const config = strapi.config.get<PublicChatConfig>('plugin::ai-sdk-public-chat');
     const aiSdk = strapi.plugin('ai-sdk') as unknown as AiSdkPlugin | undefined;

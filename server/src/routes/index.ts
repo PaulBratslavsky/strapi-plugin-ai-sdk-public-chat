@@ -23,6 +23,18 @@ export default {
         },
       },
       {
+        method: 'POST',
+        path: '/ask',
+        handler: 'controller.ask',
+        config: { policies: [], middlewares: ['plugin::ai-sdk.guardrail'] },
+      },
+      {
+        method: 'POST',
+        path: '/ask-stream',
+        handler: 'controller.askStream',
+        config: { policies: [], middlewares: ['plugin::ai-sdk.guardrail'] },
+      },
+      {
         method: 'GET',
         path: '/widget.js',
         handler: 'controller.serveWidget',
