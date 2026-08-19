@@ -27,6 +27,22 @@ export interface PublicChatConfig {
   maxOutputTokens?: number;
   /** Include public-memory documents in the system prompt. */
   includePublicMemories: boolean;
+  /**
+   * Prompt-injection screening for the anonymous routes.
+   *
+   * This module lives here rather than in strapi-plugin-ai-sdk because every
+   * route in this plugin is anonymous — no session, no token, no role beyond
+   * Public. That is the surface screening exists for. ai-sdk serves only
+   * logged-in admins, where it would amount to protecting a trusted user from
+   * themselves.
+   */
+  guardrails?: {
+    enabled?: boolean;
+    maxInputLength?: number;
+    additionalPatterns?: string[];
+    disableDefaultPatterns?: boolean;
+    blockedMessage?: string;
+  };
 }
 
 export default {
@@ -39,6 +55,10 @@ export default {
     maxSteps: 2,
     maxOutputTokens: undefined as number | undefined,
     includePublicMemories: true,
+    guardrails: {
+      enabled: true,
+      maxInputLength: 10000,
+    },
   },
   validator(config: Partial<PublicChatConfig>) {
     if (config.allowedTools !== undefined && !Array.isArray(config.allowedTools)) {
