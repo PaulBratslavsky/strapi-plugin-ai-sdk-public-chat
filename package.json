@@ -1,7 +1,7 @@
 {
   "name": "strapi-plugin-ai-sdk-public-chat",
   "version": "1.0.0",
-  "description": "Anonymous-facing chat widget for strapi-plugin-ai-sdk, isolated behind its own routes, permissions, and explicit tool allow-list",
+  "description": "Standalone anonymous chat widget for Strapi: read-only content tools, its own provider, and prompt-injection screening",
   "license": "MIT",
   "author": "Paul Brats <codingafterthirty@gmail.com>",
   "type": "commonjs",
@@ -42,7 +42,9 @@
     "zod": "^4.3.5",
     "@ai-sdk/react": "^3.0.41",
     "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "@ai-sdk/anthropic": "^3.0.0",
+    "@ai-sdk/openai-compatible": "^2.0.0"
   },
   "devDependencies": {
     "@strapi/sdk-plugin": "^5.3.2",
@@ -58,19 +60,13 @@
     "@types/react-dom": "^18.3.1"
   },
   "peerDependencies": {
-    "@strapi/strapi": "^5.47.0",
-    "strapi-plugin-ai-sdk": "^2.0.0"
-  },
-  "peerDependenciesMeta": {
-    "strapi-plugin-ai-sdk": {
-      "optional": true
-    }
+    "@strapi/strapi": "^5.47.0"
   },
   "strapi": {
     "kind": "plugin",
     "name": "ai-sdk-public-chat",
     "displayName": "AI SDK: Public Chat",
-    "description": "Anonymous chat widget with an explicit tool allow-list"
+    "description": "Standalone anonymous chat widget with read-only content tools"
   },
   "engines": {
     "node": ">=18.0.0 <=22.x.x",
